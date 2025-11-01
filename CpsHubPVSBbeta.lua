@@ -16,12 +16,12 @@ local Localization = WindUI:Localization({
         ["en"] = {
             ["CPS_NETWORK"] = "CPS Network",
             ["WELCOME"] = "Welcome to CPS Network!",
-            ["HUB_DESC"] = "Premium Roblox Script Hub",
+            ["HUB_DESC"] = "Plants vs Brainrots Premium Hub",
             ["INTRODUCTION"] = "Introduction",
-            ["COMBAT"] = "Combat",
+            ["AUTO_FARM"] = "Auto Farm",
+            ["AUTO_SELL"] = "Auto Sell",
+            ["AUTO_COLLECT"] = "Auto Collect",
             ["SHOP"] = "Shop",
-            ["AUTOMATION"] = "Automation",
-            ["UTILITIES"] = "Utilities",
             ["SETTINGS"] = "Settings"
         }
     }
@@ -72,7 +72,7 @@ end
 WindUI:Popup({
     Title = gradient("Welcome To CPS Network!", Color3.fromHex("#ec4d03"), Color3.fromHex("#490303")),
     Icon = "rbxassetid://115220176602432",
-    Content = "Please join the discord server !",
+    Content = "Plants vs Brainrots Premium Hub - Join the Discord!",
     Theme = "MonoOrange",
     Buttons = {
         {
@@ -100,14 +100,12 @@ local Backpack = LocalPlayer:WaitForChild("Backpack")
 local AutoCollect = false
 local AutoFarm = false
 local autoClicking = false
-local AutoCollectDelay = 60
+local AutoCollectDelay = 5
 local ClickInterval = 0.25
 local HeldToolName = "Basic Bat"
 local SellPlant = false
 local SellBrainrot = false
 local SellEverything = false
-
-local serverStartTime = os.time()
 
 local shop = {
     seedList = {
@@ -139,8 +137,267 @@ local AutoBuySelectedSeed = false
 local AutoBuySelectedGear = false
 local AutoBuyAllSeed = false
 local AutoBuyAllGear = false
-local AutoBuySeed = false
-local AutoBuyGear = false
+
+local Window = WindUI:CreateWindow({
+    Title = "CPS Network - Plants vs Brainrots",
+    Icon = "rbxassetid://115220176602432",
+    Author = "Beta",
+    Folder = "CPS_Network_PvB",
+    Size = UDim2.fromOffset(620, 500),
+    Theme = "MonoOrange",
+    Transparent = true,
+    BackgroundImageTransparency = 0.25,
+    HidePanelBackground = false,
+    NewElements = false,
+    Background = "rbxassetid://126127539858360",
+    User = {
+        Enabled = true,
+        Anonymous = false,
+        Callback = function()
+            WindUI:Notify({
+                Title = "User Profile",
+                Content = "CPS Network Hub!",
+                Duration = 3
+            })
+        end
+    },
+    Acrylic = false,
+    HideSearchBar = false,
+    SideBarWidth = 200,
+    
+    OpenButton = {
+        Title = "CPS Network - PvB",
+        CornerRadius = UDim.new(1,0),
+        StrokeThickness = 3,
+        Enabled = true,
+        OnlyMobile = false,
+        
+        Color = ColorSequence.new(
+            Color3.fromHex("#FFB347"), 
+            Color3.fromHex("#D94A00")
+        ),
+    },
+})
+
+Window.User:SetAnonymous(false)
+Window:SetIconSize(48)
+
+Window:Tag({
+    Title = "Beta",
+    Color = Color3.fromHex("#ff3300")
+})
+
+Window:CreateTopbarButton("discord-btn", "geist:logo-discord", function()
+    local link = "https://discord.gg/J2PK69tFRM"
+    if setclipboard then
+        pcall(function()
+            setclipboard(link)
+        end)
+    end
+    WindUI:Notify({
+        Title = "Discord Link Copied!",
+        Content = "Join CPS Network on Discord!",
+        Icon = "geist:logo-discord",
+        Duration = 3
+    })
+end, 990)
+
+Window:CreateTopbarButton("youtube-btn", "lucide:youtube", function()
+    local link = "https://www.youtube.com/@waspire"
+    if setclipboard then
+        pcall(function()
+            setclipboard(link)
+        end)
+    end
+    WindUI:Notify({
+        Title = "YouTube Link Copied!",
+        Content = "Subscribe to our channel!",
+        Icon = "lucide:youtube",
+        Duration = 3
+    })
+end, 990)
+
+Window:Divider()
+
+local Tabs = {
+    Introduction = Window:Tab({
+        Title = "Introduction",
+        Icon = "lucide:info",
+        Opened = true
+    }),
+    
+    AutoFarm = Window:Tab({
+        Title = "Auto Farm",
+        Icon = "lucide:sword",
+        Opened = false
+    }),
+    
+    AutoSell = Window:Tab({
+        Title = "Auto Sell",
+        Icon = "lucide:dollar-sign",
+        Opened = false
+    }),
+    
+    AutoCollect = Window:Tab({
+        Title = "Auto Collect",
+        Icon = "lucide:hand-coins",
+        Opened = false
+    }),
+    
+    Shop = Window:Tab({
+        Title = "Shop",
+        Icon = "lucide:shopping-cart",
+        Opened = false
+    }),
+    
+    Settings = Window:Tab({
+        Title = "Settings",
+        Icon = "lucide:settings",
+        Opened = false
+    }),
+}
+
+-- ========== INTRODUCTION TAB ==========
+
+Tabs.Introduction:Divider()
+
+Tabs.Introduction:Paragraph({
+    Title = gradient("━━━ CPS Network Introduction ━━━", Color3.fromHex("#FFB347"), Color3.fromHex("#D94A00")),
+    Desc = "",
+    TextSize = 18,
+    TextTransparency = 0.05,
+    Box = false,
+})
+
+Tabs.Introduction:Divider()
+
+Tabs.Introduction:Paragraph({
+    Title = "",
+    Desc = "",
+    Image = "",
+    ImageSize = 30,
+    Thumbnail = "rbxassetid://136887189396137",
+    ThumbnailSize = 250,
+})
+
+Tabs.Introduction:Divider()
+
+Tabs.Introduction:Paragraph({
+    Title = gradient("Welcome to CPS Network!", Color3.fromHex("#FFB347"), Color3.fromHex("#D94A00")),
+    Desc = "CPS Network is home to 40,000+ active members and premium automation scripts for Plants vs Brainrots. We deliver the most advanced botting tools for Roblox, with continuous updates and 24/7 Discord support.",
+    TextSize = 13,
+    Box = true,
+})
+
+Tabs.Introduction:Divider()
+
+Tabs.Introduction:Paragraph({
+    Title = gradient("Features Included", Color3.fromHex("#ec4d03"), Color3.fromHex("#D94A00")),
+    Desc = "✓ Advanced Auto Farm System\n✓ Automated Money Collection\n✓ Smart Auto Sell for Plants & Brainrots\n✓ Shop Automation (Seeds & Gear)\n✓ Anti-AFK Protection\n✓ Real-time Performance Monitoring\n✓ Customizable Automation Settings",
+    TextSize = 12,
+    Box = true,
+})
+
+Tabs.Introduction:Divider()
+
+Tabs.Introduction:Paragraph({
+    Title = gradient("How to Use", Color3.fromHex("#FFB347"), Color3.fromHex("#490303")),
+    Desc = "1. Navigate to 'Auto Farm' tab to start farming brainrots\n2. Use 'Auto Collect' for automated money gathering\n3. Enable 'Auto Sell' to sell inventory automatically\n4. Configure Shop automation for seed/gear purchases\n5. Always use on PRIVATE SERVERS for safety\n6. Join Discord for support: discord.gg/J2PK69tFRM",
+    TextSize = 12,
+    Box = true,
+})
+
+Tabs.Introduction:Divider()
+
+Tabs.Introduction:Button({
+    Title = "Join CPS Network Discord",
+    Icon = "geist:logo-discord",
+    Callback = function()
+        local link = "https://discord.gg/J2PK69tFRM"
+        if setclipboard then
+            pcall(function()
+                setclipboard(link)
+            end)
+        end
+        WindUI:Notify({
+            Title = "Discord Invite Copied!",
+            Content = "Join us on Discord now!",
+            Icon = "check",
+            Duration = 3
+        })
+    end
+})
+
+Tabs.Introduction:Button({
+    Title = "Subscribe on YouTube",
+    Icon = "lucide:youtube",
+    Callback = function()
+        local link = "https://www.youtube.com/@waspire"
+        if setclipboard then
+            pcall(function()
+                setclipboard(link)
+            end)
+        end
+        WindUI:Notify({
+            Title = "YouTube Link Copied!",
+            Content = "Please subscribe!",
+            Icon = "check",
+            Duration = 3
+        })
+    end
+})
+
+-- End of Snippet 1: UI setup and Introduction tab completed
+-- ========== HELPER FUNCTIONS ==========
+
+local BrainrotsCache = {}
+
+local function UpdateBrainrotsCache()
+    local ok, folder = pcall(function()
+        return Workspace:WaitForChild("ScriptedMap"):WaitForChild("Brainrots")
+    end)
+    if not ok or not folder then return end
+    BrainrotsCache = {}
+    for _, b in ipairs(folder:GetChildren()) do
+        if b:FindFirstChild("BrainrotHitbox") then
+            table.insert(BrainrotsCache, b)
+        end
+    end
+end
+
+local function GetNearestBrainrot()
+    local nearest = nil
+    local minDist = math.huge
+    for _, b in ipairs(BrainrotsCache) do
+        local hitbox = b:FindFirstChild("BrainrotHitbox")
+        if hitbox then
+            local dist = (HumanoidRootPart.Position - hitbox.Position).Magnitude
+            if dist < minDist then
+                minDist = dist
+                nearest = b
+            end
+        end
+    end
+    return nearest
+end
+
+local function GetNearestPlot()
+    local nearestPlot = nil
+    local minDist = math.huge
+    for _, plot in ipairs(Workspace.Plots:GetChildren()) do
+        if plot:IsA("Folder") then
+            local center = plot:FindFirstChild("Center") or plot:FindFirstChildWhichIsA("BasePart")
+            if center then
+                local dist = (HumanoidRootPart.Position - center.Position).Magnitude
+                if dist < minDist then
+                    minDist = dist
+                    nearestPlot = plot
+                end
+            end
+        end
+    end
+    return nearestPlot
+end
 
 local function GetMyPlot()
     for _, plot in ipairs(Workspace.Plots:GetChildren()) do
@@ -176,11 +433,25 @@ local function GetRebirth()
     return 0
 end
 
-local function FormatTime(sec)
-    local h = math.floor(sec / 3600)
-    local m = math.floor((sec % 3600) / 60)
-    local s = sec % 60
-    return string.format("%02d:%02d:%02d", h, m, s)
+local function EquipBat()
+    local tool = Backpack:FindFirstChild(HeldToolName) or Character:FindFirstChild(HeldToolName)
+    if tool then tool.Parent = Character end
+end
+
+local function InstantWarpToBrainrot(brainrot)
+    local hitbox = brainrot and brainrot:FindFirstChild("BrainrotHitbox")
+    if hitbox then
+        local offset = Vector3.new(0, 1, 3)
+        HumanoidRootPart.CFrame = CFrame.new(hitbox.Position + offset, hitbox.Position)
+    end
+end
+
+local function DoClick()
+    pcall(function()
+        VirtualUser:Button1Down(Vector2.new(0, 0))
+        task.wait(0.03)
+        VirtualUser:Button1Up(Vector2.new(0, 0))
+    end)
 end
 
 local function GetBridgeNet2()
@@ -189,223 +460,6 @@ end
 
 local function GetRemotesFolder()
     return ReplicatedStorage:FindFirstChild("Remotes")
-end
-
-local Window = WindUI:CreateWindow({
-    Title = "Plants vs Brainrots",
-    Icon = "rbxassetid://115220176602432",
-    Author = "CPS Network",
-    Folder = "WindUI_Example",
-    Size = UDim2.fromOffset(590, 500),
-    Theme = "MonoOrange",
-    Transparent = true,
-    BackgroundImageTransparency = 0.25,
-    HidePanelBackground = false,
-    NewElements = false,
-    Background = "rbxassetid://126127539858360",
-    User = {
-        Enabled = true,
-        Anonymous = true,
-        Callback = function()
-            WindUI:Notify({
-                Title = "User Profile",
-                Content = "User profile clicked!",
-                Duration = 3
-            })
-        end
-    },
-    Acrylic = false,
-    HideSearchBar = false,
-    SideBarWidth = 200,
-    
-    OpenButton = {
-        Title = "Open CPS Network Hub UI",
-        CornerRadius = UDim.new(1,0),
-        StrokeThickness = 3,
-        Enabled = true,
-        OnlyMobile = false,
-        
-        Color = ColorSequence.new(
-            Color3.fromHex("#FFB347"), 
-            Color3.fromHex("#D94A00")
-        ),
-    },
-})
-
-Window.User:SetAnonymous(false)
-Window:SetIconSize(48)
-
-Window:Tag({
-    Title = "By CPS Network",
-    Color = Color3.fromHex("#ff3300")
-})
-
-Window:CreateTopbarButton("theme-switcher", "geist:logo-discord", function()
-    local link = "https://discord.com/invite/J2PK69tFRM"
-    if setclipboard then
-        pcall(function()
-            setclipboard(link)
-        end)
-    end
-    WindUI:Notify({
-        Title = "Discord link has been copied!",
-        Content = "Please join our discord!",
-        Icon = "geist:logo-discord",
-        Duration = 3
-    })
-end, 990)
-
-Window:CreateTopbarButton("theme-switcherr", "lucide:youtube", function()
-    local link = "https://www.youtube.com/@waspire"
-    if setclipboard then
-        pcall(function()
-            setclipboard(link)
-        end)
-    end
-    WindUI:Notify({
-        Title = "Youtube Channel link has been copied!",
-        Content = "Please Subscribe!",
-        Icon = "lucide:youtube",
-        Duration = 3
-    })
-end, 990)
-
-Window:Divider()
-
-local Tabs = {
-    Introduction = Window:Tab({
-        Title = "Introduction",
-        Icon = "lucide:house",
-        Opened = true
-    }),
-
-    Window:Divider(),
-
-    Utilities = Window:Tab({
-        Title = "Utilities",
-        Icon = "lucide:plus",
-        Opened = true
-    }),
-    
-    AutoCounter = Window:Tab({
-        Title = "Auto Counter",
-        Icon = "lucide:shield",
-        Opened = true
-    }),
-    
-    AutoCombat = Window:Tab({
-        Title = "Auto Combat",
-        Icon = "lucide:sword",
-        Opened = true
-    }),
-}
-
-Tabs.Introduction:Divider()
-
-Tabs.Introduction:Paragraph({
-    Title = "   <font size=\"20\">━━━<u>CPS Network Introduction</u>━━━</font>",
-    Desc = "",
-    TextSize = 21,
-    TextTransparency = 0.05,
-    Box = false,
-})
-
-Tabs.Introduction:Divider()
-
-Tabs.Introduction:Paragraph({
-    Title = "",
-    Desc = "",
-    Image = "",
-    ImageSize = 30,
-    Thumbnail = "rbxassetid://136887189396137",
-    ThumbnailSize = 250,
-})
-
-Tabs.Introduction:Divider()
-
-Tabs.Introduction:Paragraph({
-    Title = gradient("Welcome to CPS Network!", Color3.fromHex("#FFB347"), Color3.fromHex("#D94A00")),
-    Desc = "CPS Network is your premium destination for high-quality Roblox scripts and exploits. We specialize in providing cutting-edge automation tools for Plants vs Brainrots and many other popular Roblox games.\n\nOur hub features over 40,000+ active members and constantly updated scripts!",
-    TextSize = 14,
-    Box = true,
-})
-
-Tabs.Introduction:Divider()
-
-Tabs.Introduction:Paragraph({
-    Title = gradient("Key Features", Color3.fromHex("#ec4d03"), Color3.fromHex("#D94A00")),
-    Desc = "• Advanced Auto Combat System - Automatically farm brainrots with precision\n• Smart Auto Collection - Efficiently collect money from your plots\n• Auto Shop Integration - Purchase seeds and gear automatically\n• Anti-AFK Protection - Stay in-game longer\n• Premium Support - Join our Discord for 24/7 assistance",
-    TextSize = 13,
-    Box = true,
-})
-
-Tabs.Introduction:Divider()
-
-Tabs.Introduction:Paragraph({
-    Title = gradient("Getting Started", Color3.fromHex("#FFB347"), Color3.fromHex("#490303")),
-    Desc = "1. Join our Discord server for updates and support\n2. Navigate through the tabs to explore features\n3. Enable Auto Combat for automatic farming\n4. Use Auto Counter for defense strategies\n5. Configure Utilities for enhanced gameplay\n\nFor best results, use on PRIVATE SERVERS ONLY!",
-    TextSize = 13,
-    Box = true,
-})
-
-Tabs.Introduction:Divider()
-
-Tabs.Introduction:Button({
-    Title = "Join CPS Network Discord",
-    Icon = "geist:logo-discord",
-    Callback = function()
-        local link = "https://discord.com/invite/J2PK69tFRM"
-        if setclipboard then
-            pcall(function()
-                setclipboard(link)
-            end)
-        end
-        WindUI:Notify({
-            Title = "Discord Invite Copied!",
-            Content = "Discord link copied to clipboard!",
-            Icon = "check",
-            Duration = 3
-        })
-    end
-})
-
-Tabs.Introduction:Button({
-    Title = "Subscribe on YouTube",
-    Icon = "lucide:youtube",
-    Callback = function()
-        local link = "https://www.youtube.com/@waspire"
-        if setclipboard then
-            pcall(function()
-                setclipboard(link)
-            end)
-        end
-        WindUI:Notify({
-            Title = "YouTube Link Copied!",
-            Content = "Please subscribe to our channel!",
-            Icon = "check",
-            Duration = 3
-        })
-    end
-})
-
--- ========== UTILITIES TAB ==========
-
-local function GetNearestPlot()
-    local nearestPlot = nil
-    local minDist = math.huge
-    for _, plot in ipairs(Workspace.Plots:GetChildren()) do
-        if plot:IsA("Folder") then
-            local center = plot:FindFirstChild("Center") or plot:FindFirstChildWhichIsA("BasePart")
-            if center then
-                local dist = (HumanoidRootPart.Position - center.Position).Magnitude
-                if dist < minDist then
-                    minDist = dist
-                    nearestPlot = plot
-                end
-            end
-        end
-    end
-    return nearestPlot
 end
 
 local function CollectFromPlot(plot)
@@ -435,17 +489,198 @@ local function CollectFromPlot(plot)
     end
 end
 
-Tabs.Utilities:Paragraph({
-    Title = "Auto Collection Settings",
-    Desc = "Configure automatic money collection from your plots",
-    Image = "lucide:settings",
-    ImageSize = 20,
+-- ========== AUTO FARM TAB ==========
+
+Tabs.AutoFarm:Paragraph({
+    Title = "Auto Farm Information",
+    Desc = "⚠️ WARNING: Use on PRIVATE SERVERS only! This automatically attacks brainrots and equips your bat.",
+    Image = "badge-alert",
+    Color = Color3.fromHex("#D94A00"),
+})
+
+Tabs.AutoFarm:Divider()
+
+Tabs.AutoFarm:Toggle({
+    Title = "Enable Auto Farm",
+    Desc = "Automatically attacks the nearest brainrots",
+    Value = false,
+    Callback = function(v)
+        AutoFarm = v
+        autoClicking = v
+
+        if v then
+            EquipBat()
+            UpdateBrainrotsCache()
+
+            task.spawn(function()
+                while autoClicking do
+                    if Character and Character:FindFirstChild(HeldToolName) then
+                        DoClick()
+                    end
+                    task.wait(ClickInterval)
+                end
+            end)
+
+            task.spawn(function()
+                while AutoFarm do
+                    if Character and not Character:FindFirstChild(HeldToolName) then
+                        EquipBat()
+                    end
+                    task.wait(0.5)
+                end
+            end)
+
+            task.spawn(function()
+                while AutoFarm do
+                    UpdateBrainrotsCache()
+                    task.wait(1)
+                end
+            end)
+
+            task.spawn(function()
+                while AutoFarm do
+                    local currentTarget = GetNearestBrainrot()
+                    if not currentTarget then
+                        task.wait(0.5)
+                        continue
+                    end
+                    if currentTarget and currentTarget:FindFirstChild("BrainrotHitbox") then
+                        InstantWarpToBrainrot(currentTarget)
+                        pcall(function()
+                            local remotes = GetRemotesFolder()
+                            if remotes and remotes:FindFirstChild("AttacksServer") and remotes.AttacksServer:FindFirstChild("WeaponAttack") then
+                                remotes.AttacksServer.WeaponAttack:FireServer({ { target = currentTarget.BrainrotHitbox } })
+                            else
+                                local ok, _ = pcall(function()
+                                    ReplicatedStorage.Remotes.AttacksServer.WeaponAttack:FireServer({ { target = currentTarget.BrainrotHitbox } })
+                                end)
+                            end
+                        end)
+                    end
+                    task.wait(ClickInterval)
+                end
+            end)
+        else
+            autoClicking = false
+        end
+    end
+})
+
+Tabs.AutoFarm:Slider({
+    Title = "Click Interval Speed",
+    Desc = "Adjust how fast clicks are performed",
+    Value = { Min = 0.05, Max = 1, Default = 0.25 },
+    Step = 0.05,
+    Callback = function(val)
+        ClickInterval = val
+    end
+})
+
+Tabs.AutoFarm:Divider()
+
+Tabs.AutoFarm:Paragraph({
+    Title = "Advanced Farming",
+    Desc = "Additional farming options for experienced users",
     Color = Color3.fromHex("#FFB347"),
 })
 
-Tabs.Utilities:Divider()
+Tabs.AutoFarm:Toggle({
+    Title = "Instant Warp to Nearest",
+    Desc = "Teleport instantly to nearest brainrot (experimental)",
+    Value = false,
+    Callback = function(state)
+        if state then
+            task.spawn(function()
+                while state do
+                    local nearest = GetNearestBrainrot()
+                    if nearest then
+                        InstantWarpToBrainrot(nearest)
+                    end
+                    task.wait(0.1)
+                end
+            end)
+        end
+    end
+})
 
-Tabs.Utilities:Slider({
+-- ========== AUTO SELL TAB ==========
+
+Tabs.AutoSell:Paragraph({
+    Title = "Auto Sell Settings",
+    Desc = "Automatically sell your plants and brainrots for money",
+    Image = "lucide:dollar-sign",
+    Color = Color3.fromHex("#FFB347"),
+})
+
+Tabs.AutoSell:Divider()
+
+Tabs.AutoSell:Toggle({
+    Title = "Sell All Brainrots",
+    Desc = "Automatically sell all brainrots in inventory",
+    Value = false,
+    Callback = function(state)
+        SellBrainrot = state
+    end
+})
+
+Tabs.AutoSell:Toggle({
+    Title = "Sell All Plants",
+    Desc = "Automatically sell all plants in inventory",
+    Value = false,
+    Callback = function(state)
+        SellPlant = state
+    end
+})
+
+Tabs.AutoSell:Toggle({
+    Title = "Sell Everything",
+    Desc = "Sell both plants and brainrots simultaneously",
+    Value = false,
+    Callback = function(state)
+        SellEverything = state
+    end
+})
+
+Tabs.AutoSell:Divider()
+
+Tabs.AutoSell:Paragraph({
+    Title = "Sell Status Monitor",
+    Desc = "Track current selling status and earnings",
+    Color = Color3.fromHex("#D94A00"),
+})
+
+Tabs.AutoSell:Button({
+    Title = "Sell Everything NOW",
+    Icon = "lucide:zap",
+    Callback = function()
+        local remotes = GetRemotesFolder()
+        if remotes and remotes:FindFirstChild("ItemSell") then
+            pcall(function() remotes.ItemSell:FireServer() end)
+        else
+            pcall(function() ReplicatedStorage.Remotes.ItemSell:FireServer() end)
+        end
+        WindUI:Notify({
+            Title = "Sell Triggered!",
+            Content = "Your inventory is being sold!",
+            Icon = "check",
+            Duration = 2
+        })
+    end
+})
+
+-- End of Snippet 2: Auto Farm and Auto Sell tabs completed
+-- ========== AUTO COLLECT TAB ==========
+
+Tabs.AutoCollect:Paragraph({
+    Title = "Collection Settings",
+    Desc = "Configure automatic money collection from your plots",
+    Image = "lucide:hand-coins",
+    Color = Color3.fromHex("#FFB347"),
+})
+
+Tabs.AutoCollect:Divider()
+
+Tabs.AutoCollect:Slider({
     Title = "Collection Delay (seconds)",
     Desc = "Time between each collection cycle",
     Value = {Min = 1, Max = 60, Default = 5},
@@ -455,7 +690,7 @@ Tabs.Utilities:Slider({
     end
 })
 
-Tabs.Utilities:Toggle({
+Tabs.AutoCollect:Toggle({
     Title = "Auto Collect Money",
     Desc = "Automatically collect money from nearest plot",
     Value = false,
@@ -475,7 +710,7 @@ Tabs.Utilities:Toggle({
     end
 })
 
-Tabs.Utilities:Toggle({
+Tabs.AutoCollect:Toggle({
     Title = "Auto Collect V2 [PATCHED]",
     Desc = "Alternative collection method (currently patched)",
     Value = false,
@@ -496,58 +731,39 @@ Tabs.Utilities:Toggle({
     end
 })
 
-Tabs.Utilities:Divider()
-
-Tabs.Utilities:Paragraph({
-    Title = "Selling Options",
-    Desc = "Automatically sell your plants and brainrots",
-    Image = "lucide:dollar-sign",
-    ImageSize = 20,
-    Color = Color3.fromHex("#D94A00"),
-})
-
-Tabs.Utilities:Divider()
-
-Tabs.Utilities:Toggle({
-    Title = "Sell All Brainrots",
-    Desc = "Automatically sell all brainrots in inventory",
+Tabs.AutoCollect:Toggle({
+    Title = "Auto Equip Brainrot",
+    Desc = "Automatically equip best brainrot (PATCHED)",
     Value = false,
     Callback = function(state)
-        SellBrainrot = state
+        if state then
+            task.spawn(function()
+                while state do
+                    local args = {
+                        {
+                            [2] = "\004"
+                        }
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("BridgeNet2"):WaitForChild("dataRemoteEvent"):FireServer(unpack(args))
+                    task.wait(1)
+                end
+            end)
+        end
     end
 })
 
-Tabs.Utilities:Toggle({
-    Title = "Sell All Plants",
-    Desc = "Automatically sell all plants in inventory",
-    Value = false,
-    Callback = function(state)
-        SellPlant = state
-    end
-})
+-- ========== SHOP TAB ==========
 
-Tabs.Utilities:Toggle({
-    Title = "Sell Everything",
-    Desc = "Sell both plants and brainrots simultaneously",
-    Value = false,
-    Callback = function(state)
-        SellEverything = state
-    end
-})
-
-Tabs.Utilities:Divider()
-
-Tabs.Utilities:Paragraph({
+Tabs.Shop:Paragraph({
     Title = "Shop Automation - Seeds",
     Desc = "Automatically purchase seeds from the shop",
     Image = "lucide:shopping-cart",
-    ImageSize = 20,
     Color = Color3.fromHex("#FFB347"),
 })
 
-Tabs.Utilities:Divider()
+Tabs.Shop:Divider()
 
-Tabs.Utilities:Dropdown({
+Tabs.Shop:Dropdown({
     Title = "Select Seeds to Buy",
     Values = shop.seedList,
     Multi = true,
@@ -557,13 +773,12 @@ Tabs.Utilities:Dropdown({
     end
 })
 
-Tabs.Utilities:Toggle({
+Tabs.Shop:Toggle({
     Title = "Auto Buy Selected Seeds",
     Desc = "Purchase only the selected seeds",
     Value = false,
     Callback = function(state)
         AutoBuySelectedSeed = state
-        AutoBuySeed = state
         if state then
             task.spawn(function()
                 while AutoBuySelectedSeed do
@@ -579,7 +794,7 @@ Tabs.Utilities:Toggle({
     end
 })
 
-Tabs.Utilities:Toggle({
+Tabs.Shop:Toggle({
     Title = "Auto Buy ALL Seeds",
     Desc = "Purchase all available seeds continuously",
     Value = false,
@@ -600,18 +815,18 @@ Tabs.Utilities:Toggle({
     end
 })
 
--- ======= CONTINUATION IN SNIPPET 2 =======
-Tabs.Utilities:Paragraph({
+Tabs.Shop:Divider()
+
+Tabs.Shop:Paragraph({
     Title = "Shop Automation - Gear",
     Desc = "Automatically purchase gear from the shop",
     Image = "lucide:package",
-    ImageSize = 20,
     Color = Color3.fromHex("#FFB347"),
 })
 
-Tabs.Utilities:Divider()
+Tabs.Shop:Divider()
 
-Tabs.Utilities:Dropdown({
+Tabs.Shop:Dropdown({
     Title = "Select Gear to Buy",
     Values = shop.gearList,
     Multi = true,
@@ -621,13 +836,12 @@ Tabs.Utilities:Dropdown({
     end
 })
 
-Tabs.Utilities:Toggle({
+Tabs.Shop:Toggle({
     Title = "Auto Buy Selected Gear",
     Desc = "Purchase only the selected gear",
     Value = false,
     Callback = function(state)
         AutoBuySelectedGear = state
-        AutoBuyGear = state
         if state then
             task.spawn(function()
                 while AutoBuySelectedGear do
@@ -643,7 +857,7 @@ Tabs.Utilities:Toggle({
     end
 })
 
-Tabs.Utilities:Toggle({
+Tabs.Shop:Toggle({
     Title = "Auto Buy ALL Gear",
     Desc = "Purchase all available gear continuously",
     Value = false,
@@ -664,133 +878,53 @@ Tabs.Utilities:Toggle({
     end
 })
 
--- ========== AUTO COUNTER TAB ==========
+-- ========== SETTINGS TAB ==========
 
-Tabs.AutoCounter:Paragraph({
-    Title = "Auto Counter",
-    Desc = "Automatically counters enemies with timing-based defense.",
-    Image = "lucide:shield",
-    ImageSize = 24,
-    Color = Color3.fromHex("#D94A00"),
-})
-
-Tabs.AutoCounter:Toggle({
-    Title = "Enable Auto Counter",
-    Desc = "Start using the auto-counter system to avoid incoming attacks.",
-    Value = false,
-    Callback = function(state)
-        if state then
-            task.spawn(function()
-                while state do
-                    -- Checks for threatening NPCs nearby and triggers blocks/counters.
-                    local enemy = Workspace:FindFirstChild("NearestEnemy") -- Example; replace with game-specific logic
-                    if enemy then
-                        -- Add proper logic to block/counter here
-                        print("Countering detected threat!")
-                        -- optional: trigger animation or remote event
-                    end
-                    task.wait(0.5)
-                end
-            end)
-        end
-    end
-})
-
-Tabs.AutoCounter:Divider()
-
-Tabs.AutoCounter:Paragraph({
-    Title = "Counter Settings",
-    Desc = "Fine-tune counter delay and reaction settings.",
-    TextSize = 14,
-    Box = true,
-})
-
-Tabs.AutoCounter:Slider({
-    Title = "Counter Reaction Delay",
-    Desc = "Set delay before reacting to attack (ms)",
-    Value = { Min = 0.05, Max = 1, Default = 0.3 },
-    Step = 0.05,
-    Callback = function(value)
-        -- you could use this value for advanced counter logic
-    end
-})
-
--- ========== AUTO COMBAT TAB ==========
-
-Tabs.AutoCombat:Paragraph({
-    Title = "Auto Combat (PvB)",
-    Desc = "Automates attacking the nearest brainrot enemy in Plants VS Brainrot.",
-    Image = "lucide:sword",
-    ImageSize = 24,
+Tabs.Settings:Paragraph({
+    Title = "Hub Settings",
+    Desc = "Configure your CPS Network experience",
     Color = Color3.fromHex("#FFB347"),
 })
 
-Tabs.AutoCombat:Toggle({
-    Title = "Enable Auto Combat",
-    Desc = "Farm ALL enemies automatically. Only use on private servers!",
-    Value = false,
-    Callback = function(state)
-        AutoFarm = state
-        autoClicking = state
+Tabs.Settings:Divider()
 
-        if state then
-            EquipBat()
-            task.spawn(function()
-                while autoClicking do
-                    -- Auto-clicking logic
-                    if Character and Character:FindFirstChild(HeldToolName) then
-                        pcall(function()
-                            VirtualUser:Button1Down(Vector2.new(0, 0))
-                            task.wait(0.03)
-                            VirtualUser:Button1Up(Vector2.new(0, 0))
-                        end)
-                    end
-                    task.wait(ClickInterval)
-                end
-            end)
-            task.spawn(function()
-                while AutoFarm do
-                    -- Find and attack nearest brainrot
-                    -- Custom auto-farm logic
-                    local nearestPlot = GetNearestPlot()
-                    if nearestPlot then
-                        CollectFromPlot(nearestPlot)
-                    end
-                    task.wait(1)
-                end
-            end)
-        end
+Tabs.Settings:Button({
+    Title = "Clear All Settings",
+    Icon = "lucide:trash-2",
+    Callback = function()
+        AutoFarm = false
+        AutoCollect = false
+        SellBrainrot = false
+        SellPlant = false
+        SellEverything = false
+        AutoBuySelectedSeed = false
+        AutoBuySelectedGear = false
+        AutoBuyAllSeed = false
+        AutoBuyAllGear = false
+        WindUI:Notify({
+            Title = "Settings Cleared",
+            Content = "All automations have been disabled!",
+            Icon = "check",
+            Duration = 3
+        })
     end
 })
 
-Tabs.AutoCombat:Paragraph({
-    Title = "Combat Notes",
-    Desc = "Uses your equipped tool to attack enemies in range.\nCustom AI logic can be improved for PvB.",
-    TextSize = 13,
-    Box = true,
+Tabs.Settings:Button({
+    Title = "Reload Hub",
+    Icon = "lucide:refresh-cw",
+    Callback = function()
+        UpdateBrainrotsCache()
+        WindUI:Notify({
+            Title = "Hub Reloaded",
+            Content = "Cache and data refreshed!",
+            Icon = "check",
+            Duration = 3
+        })
+    end
 })
 
--- ========== GENERAL WINDOW EVENTS ==========
-
-Window:OnClose(function()
-    print("CPS - PvB UI closed")
-    if ConfigManager and configFile then
-        configFile:Set("playerData", MyPlayerData)
-        configFile:Set("lastSave", os.date("%Y-%m-%d %H:%M:%S"))
-        configFile:Save()
-        print("Config auto-saved on close")
-    end
-end)
-
-Window:OnDestroy(function()
-    print("Window destroyed")
-end)
-
-Window:OnOpen(function()
-    print("Window opened")
-end)
-
-Window:UnlockAll()
+-- ========== BACKGROUND TASK LOOPS ==========
 
 task.spawn(function()
     while task.wait(0.69) do
@@ -807,7 +941,7 @@ end)
 
 task.spawn(function()
     while task.wait(0.95) do
-        if AutoBuyGear and #selectedGears > 0 then
+        if AutoBuySelectedGear and #selectedGears > 0 then
             local bn = GetBridgeNet2()
             for _, g in ipairs(selectedGears) do
                 local args = {{g, "\026"}}
@@ -820,7 +954,7 @@ task.spawn(function()
             end
         end
 
-        if AutoBuySeed and #selectedSeeds > 0 then
+        if AutoBuySelectedSeed and #selectedSeeds > 0 then
             local bn = GetBridgeNet2()
             for _, s in ipairs(selectedSeeds) do
                 local args = {{s, "\b"}}
@@ -861,5 +995,22 @@ task.spawn(function()
     end
 end)
 
--- End of CPS Network PvB UI rebrand
--- Snippet 2 complete
+-- ========== WINDOW EVENT HANDLERS ==========
+
+Window:OnClose(function()
+    print("CPS Network - PvB UI closed")
+end)
+
+Window:OnDestroy(function()
+    print("Window destroyed - Disabling all automations")
+    AutoFarm = false
+    AutoCollect = false
+end)
+
+Window:OnOpen(function()
+    print("CPS Network - PvB UI opened")
+end)
+
+Window:UnlockAll()
+
+-- End of Snippet 3: Auto Collect, Shop, Settings tabs and all event handlers completed
